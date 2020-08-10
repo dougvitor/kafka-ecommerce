@@ -1,0 +1,27 @@
+--Start kafka
+zookeeper-server-start.bat ..\..\config\zookeeper.properties
+kafka-server-start.bat ..\..\config\server.properties
+
+-- Criação de tópicos
+kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic LOJA_NOVO_PEDIDO
+
+
+-- informações dos topicos
+kafka-topics.bat --list --bootstrap-server localhost:9092
+
+kafka-topics.bat --bootstrap-server localhost:9092 --describe
+
+
+
+-- Informações dos grupos de consumers
+kafka-consumer-groups.bat --all-groups --bootstrap-server localhost:9092 --describe
+
+
+
+-- Adicionando mais partições no tópico
+kafka-topics.bat --alter --zookeeper localhost:2181 --topic ECOMMERCE_NEW_ORDER --partitions 3
+
+
+-- Delete grupos de consumers
+kafka-consumer-groups.bat --bootstrap-server localhost:9092 --delete --group br.com.home.ecommerce.FraudDetectorServiceConsumer
+
