@@ -2,11 +2,16 @@ package br.com.home.ecommerce;
 
 import java.math.BigDecimal;
 import java.util.Map;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+
 import br.com.home.ecommerce.model.PedidoCompra;
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
+import br.com.home.ecommerce.service.KafkaServiceProducer;
 
 public class FraudDetectorServiceConsumer {
+	
+	private final KafkaServiceProducer<PedidoCompra> producer = new KafkaServiceProducer<>();
 
 	public static void main(String[] args) {
 
@@ -18,7 +23,6 @@ public class FraudDetectorServiceConsumer {
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}
-
 	}
 
 	private void parse(ConsumerRecord<String, PedidoCompra> record) {
@@ -40,8 +44,10 @@ public class FraudDetectorServiceConsumer {
 		
 		if(isFraude(pedidoCompra)) {
 			System.out.println("É uma fraude!!!");
+			producer.send("ECOMMERCE_ORDER_REJECT", pedidoCompra.getUserId(), pedidoCompra);
 		}else {
 			System.out.println("Aprovado: " + pedidoCompra);
+			producer.send("ECOMMERCE_ORDER_APPROVED", pedidoCompra.getUserId(), pedidoCompra);
 		}
 
 		System.out.println("Pedido Processado");

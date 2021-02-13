@@ -2,7 +2,6 @@ package br.com.home.ecommerce.model;
 
 import java.math.BigDecimal;
 
-@SuppressWarnings("unused")
 public class PedidoCompra {
 	
 	private String userId;
@@ -20,6 +19,15 @@ public class PedidoCompra {
 
 	public BigDecimal getTotal() {
 		return total;
+	}
+
+	@Override
+	public String toString() {
+		return "PedidoCompra [userId=" + userId + ", pedidoId=" + pedidoId + ", total=" + total + "]";
+	}
+
+	public String getUserId() {
+		return userId;
 	}
 	
 }
