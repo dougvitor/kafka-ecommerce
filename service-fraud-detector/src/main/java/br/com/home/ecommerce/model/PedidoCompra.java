@@ -17,5 +17,9 @@ public class PedidoCompra {
 		this.pedidoId = pedidoId;
 		this.total = total;
 	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
 	
 }

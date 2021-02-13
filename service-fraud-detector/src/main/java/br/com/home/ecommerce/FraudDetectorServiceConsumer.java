@@ -1,5 +1,6 @@
 package br.com.home.ecommerce;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import br.com.home.ecommerce.model.PedidoCompra;
@@ -34,8 +35,19 @@ public class FraudDetectorServiceConsumer {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		var pedidoCompra = record.value();
+		
+		if(isFraude(pedidoCompra)) {
+			System.out.println("É uma fraude!!!");
+		}else {
+			System.out.println("Aprovado: " + pedidoCompra);
+		}
 
 		System.out.println("Pedido Processado");
 	}
 
+	private boolean isFraude(PedidoCompra pedidoCompra) {
+		return pedidoCompra.getTotal().compareTo(new BigDecimal("4500")) > 0;
+	}
 }
