@@ -12,8 +12,12 @@ public class EmailServiceConsumer {
 	public static void main(String[] args) {
 		var emailServiceConsumer = new EmailServiceConsumer();
 
-		try (var kafkaServiceConsumer = new KafkaServiceConsumer<Email>(EmailServiceConsumer.class.getName(),
-				"ECOMMERCE_SEND_EMAIL", emailServiceConsumer::parse, Email.class, Map.of())) {
+		try (var kafkaServiceConsumer = new KafkaServiceConsumer<Email>(
+				EmailServiceConsumer.class.getName(),
+				"ECOMMERCE_SEND_EMAIL", 
+				emailServiceConsumer::parse, 
+				Email.class, 
+				Map.of())) {
 			kafkaServiceConsumer.run();
 		}
 

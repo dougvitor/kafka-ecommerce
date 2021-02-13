@@ -18,7 +18,9 @@ public class FraudDetectorServiceConsumer {
 		FraudDetectorServiceConsumer fraudeService = new FraudDetectorServiceConsumer();
 
 		try (var kafkaServiceConsumer = new KafkaServiceConsumer<PedidoCompra>(
-				FraudDetectorServiceConsumer.class.getSimpleName(), "ECOMMERCE_NEW_ORDER", fraudeService::parse,
+				FraudDetectorServiceConsumer.class.getSimpleName(), 
+				"ECOMMERCE_NEW_ORDER", 
+				fraudeService::parse,
 				PedidoCompra.class,
 				Map.of())) {
 			kafkaServiceConsumer.run();
