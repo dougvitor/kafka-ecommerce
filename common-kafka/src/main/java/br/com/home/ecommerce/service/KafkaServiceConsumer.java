@@ -42,7 +42,14 @@ public class KafkaServiceConsumer<T> implements Closeable{
 			
 			if(!records.isEmpty()) {
 				System.out.println("Foram encontrados " + records.count() + " registros");
-				records.forEach(record -> parse.consume(record));
+				records.forEach(record -> {
+					try {
+						parse.consume(record);
+					} catch (Exception e) {
+						// TODO Por enquanto apenas logando a stack de erro
+						e.printStackTrace();
+					}
+				});
 			}
 		}
 	}
