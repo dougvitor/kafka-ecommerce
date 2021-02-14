@@ -14,15 +14,18 @@ public class CreateUserServiceConsumer {
 	
 	private final Connection connection;
 	
-	public CreateUserServiceConsumer() throws SQLException {
+	public CreateUserServiceConsumer() throws SQLException{
 		
 		String url = "jdbc:sqlite:target/users_database.db";
 		connection = DriverManager.getConnection(url);
-		String createTableSQL = "create table Usuario ("
-				+ "uuid varchar(200) primary key,"
-				+ "email varchar(200))";
-		connection.createStatement().execute(createTableSQL);
-		
+		try {
+			String createTableSQL = "create table Usuario ("
+					+ "uuid varchar(200) primary key,"
+					+ "email varchar(200))";
+			connection.createStatement().execute(createTableSQL);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) throws SQLException {
@@ -48,7 +51,7 @@ public class CreateUserServiceConsumer {
 		var pedidoCompra = record.value();
 		
 		if(isNovoUsuario(pedidoCompra.getEmail())) {
-			inseriNovoUsuario(pedidoCompra.getEmail());
+			inseriNovoUsuario(pedidoCompra.getUserId(), pedidoCompra.getEmail());
 		}
 	}
 
@@ -60,17 +63,18 @@ public class CreateUserServiceConsumer {
 		return !existsStatement.executeQuery().next();
 	}
 	
-	private void inseriNovoUsuario(String email) throws SQLException {
+	private void inseriNovoUsuario(String uuid, String email) throws SQLException {
 		var insertSQL = "insert into Usuario (uuid, email)"
 				+ "values (?,?)";
 		
 		var insertStatement = connection.prepareStatement(insertSQL);
-		insertStatement.setString(1, "uuid");
+		insertStatement.setString(1, uuid);
 		insertStatement.setString(2, email);
 		
-		if(insertStatement.execute()) {
-			System.out.println(String.format("Usuario uuid e email %s adicionado", email));
-		}
+		insertStatement.execute();
+		
+		System.out.println(String.format("Usuario %s e email %s adicionado", uuid, email));
+	
 	}
 	
 }
