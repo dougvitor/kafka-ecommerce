@@ -3,7 +3,7 @@ zookeeper-server-start.bat ..\..\config\zookeeper.properties
 kafka-server-start.bat ..\..\config\server.properties
 
 -- Criação de tópicos
-kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic LOJA_NOVO_PEDIDO
+kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic ECOMMERCE_NEW_ORDER
 
 
 -- informações dos topicos

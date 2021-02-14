@@ -15,8 +15,12 @@ public class LogServiceConsumer {
 
 		var logServiceConsumer = new LogServiceConsumer();
 
-		try (var kafkaConsumer = new KafkaServiceConsumer<String>(LogServiceConsumer.class.getSimpleName(),
-				Pattern.compile("ECOMMERCE.*"), logServiceConsumer::parse, String.class, Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()))) {
+		try (var kafkaConsumer = new KafkaServiceConsumer<String>(
+				LogServiceConsumer.class.getSimpleName(),
+				Pattern.compile("ECOMMERCE.*"), 
+				logServiceConsumer::parse, 
+				String.class, 
+				Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()))) {
 			kafkaConsumer.run();
 		}
 
