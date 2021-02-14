@@ -4,30 +4,30 @@ import java.math.BigDecimal;
 
 public class PedidoCompra {
 	
-	private String userId;
+	private final String pedidoId;
 	
-	private String pedidoId;
-	
-	private BigDecimal total;
+	private final BigDecimal total;
 
-	public PedidoCompra(String userId, String pedidoId, BigDecimal total) {
+	private final String email;
+
+	public PedidoCompra(String pedidoId, BigDecimal total, String email) {
 		super();
-		this.userId = userId;
 		this.pedidoId = pedidoId;
 		this.total = total;
+		this.email = email;
 	}
 
 	public BigDecimal getTotal() {
 		return total;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
 
 	@Override
 	public String toString() {
-		return "PedidoCompra [userId=" + userId + ", pedidoId=" + pedidoId + ", total=" + total + "]";
+		return "PedidoCompra [pedidoId=" + pedidoId + ", total=" + total + ", email=" + email + "]";
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-	
 }

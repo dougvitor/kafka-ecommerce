@@ -5,17 +5,17 @@ import java.math.BigDecimal;
 @SuppressWarnings("unused")
 public class PedidoCompra {
 	
-	private String userId;
+	private final String pedidoId;
 	
-	private String pedidoId;
-	
-	private BigDecimal total;
+	private final BigDecimal total;
 
-	public PedidoCompra(String userId, String pedidoId, BigDecimal total) {
+	private final String email;
+
+	public PedidoCompra(String pedidoId, BigDecimal total, String email) {
 		super();
-		this.userId = userId;
 		this.pedidoId = pedidoId;
 		this.total = total;
+		this.email = email;
 	}
 	
 }

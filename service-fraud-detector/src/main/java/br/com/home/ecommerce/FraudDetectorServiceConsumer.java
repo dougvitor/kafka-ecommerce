@@ -46,10 +46,10 @@ public class FraudDetectorServiceConsumer {
 		
 		if(isFraude(pedidoCompra)) {
 			System.out.println("É uma fraude!!!");
-			producer.send("ECOMMERCE_ORDER_REJECT", pedidoCompra.getUserId(), pedidoCompra);
+			producer.send("ECOMMERCE_ORDER_REJECT", pedidoCompra.getEmail(), pedidoCompra);
 		}else {
 			System.out.println("Aprovado: " + pedidoCompra);
-			producer.send("ECOMMERCE_ORDER_APPROVED", pedidoCompra.getUserId(), pedidoCompra);
+			producer.send("ECOMMERCE_ORDER_APPROVED", pedidoCompra.getEmail(), pedidoCompra);
 		}
 
 		System.out.println("Pedido Processado");
