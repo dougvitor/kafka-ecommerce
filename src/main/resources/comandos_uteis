@@ -25,3 +25,22 @@ kafka-topics.bat --alter --zookeeper localhost:2181 --topic ECOMMERCE_NEW_ORDER 
 -- Delete grupos de consumers
 kafka-consumer-groups.bat --bootstrap-server localhost:9092 --delete --group br.com.home.ecommerce.FraudDetectorServiceConsumer
 
+
+-- Replicação em Cluster
+
+Fazer cópia do arquivo server.properties, criando um novo, por exemplo server1.properties
+
+alterar a propriedade broker.id=1 por exemplo
+
+alterar a propriedade listeners=//:9091 que seria a porta
+
+alterar a propriedade log.dirs para um novo diretório que conterá informações sobre os topicos desse broker
+log.dirs=C:\\Ambiente_Java\\kafka_2.12-2.4.0\\data\\kafka1 por exemplo
+
+incluir a propriedade default.replication.factor = 2 e limpar os diretórios de data, tanto do kafka quanto do zookeeper
+
+
+
+
+
+
