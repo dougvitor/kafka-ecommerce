@@ -39,6 +39,11 @@ log.dirs=C:\\Ambiente_Java\\kafka_2.12-2.4.0\\data\\kafka1 por exemplo
 
 incluir a propriedade default.replication.factor = 2 e limpar os diretórios de data, tanto do kafka quanto do zookeeper
 
+Por padrão as propriedades default.replication.factor, offsets.topic.replication.factor e transaction.state.log.replication.factor devem ter o valor 3
+
+Atribuindo o valor 3  para as propriedades offsets.topic.replication.factor e transaction.state.log.replication.factor resolvem o problema de alguns tópicos default do kafka ficarem sem líderes após 
+a réplica
+
 
 
 
