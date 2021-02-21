@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import br.com.home.ecommerce.model.User;
+import br.com.home.ecommerce.model.Usuario;
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
 
 public class GeraRelatorioServiceConsumer {
@@ -18,20 +18,20 @@ public class GeraRelatorioServiceConsumer {
 
 		GeraRelatorioServiceConsumer fraudeService = new GeraRelatorioServiceConsumer();
 
-		try (var kafkaServiceConsumer = new KafkaServiceConsumer<User>(
+		try (var kafkaServiceConsumer = new KafkaServiceConsumer<Usuario>(
 				GeraRelatorioServiceConsumer.class.getSimpleName(), 
 				"USER_GENERATE_READING_REPORT", 
 				fraudeService::parse,
-				User.class,
+				Usuario.class,
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}
 	}
 
-	private void parse(ConsumerRecord<String, User> record) throws IOException {
+	private void parse(ConsumerRecord<String, Usuario> record) throws IOException {
 
 		System.out.println("-------------------------------------------------------");
-		User user = record.value();
+		Usuario user = record.value();
 		System.out.println(String.format("Processando relatorio para o usuário %s", user));
 		
 		var target = new File(user.getRelatorioPath());

@@ -1,0 +1,33 @@
+package br.com.home.ecommerce;
+
+import java.io.IOException;
+
+import br.com.home.ecommerce.service.KafkaServiceProducer;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+public class GeraRelatorioServlet extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private final KafkaServiceProducer<String> batchServiceProducer = new KafkaServiceProducer<>();
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		batchServiceProducer.send("SEND_MESSAGE_TO_ALL_USERS", "USER_GENERATE_READING_REPORT", "USER_GENERATE_READING_REPORT");
+		
+		System.out.println("Enviado emails para todos os usuários");
+		resp.setStatus(HttpServletResponse.SC_OK);
+		resp.getWriter().println("Relatórios gerados com sucesso!");
+	}
+	
+	@Override
+	public void destroy() {
+		super.destroy();
+		batchServiceProducer.close();
+	}
+
+}

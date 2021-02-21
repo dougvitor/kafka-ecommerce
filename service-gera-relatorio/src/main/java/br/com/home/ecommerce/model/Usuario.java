@@ -1,10 +1,10 @@
 package br.com.home.ecommerce.model;
 
-public class User {
+public class Usuario {
 	
 	private final String uuid;
 
-	public User(String uuid) {
+	public Usuario(String uuid) {
 		this.uuid = uuid;
 	}
 
