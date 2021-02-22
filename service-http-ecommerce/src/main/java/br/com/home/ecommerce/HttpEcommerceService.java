@@ -12,6 +12,7 @@ public class HttpEcommerceService {
 		var context = new ServletContextHandler();
 		context.setContextPath("/");
 		context.addServlet(new ServletHolder(new NovoPedidoServlet()), "/new");
+		context.addServlet(new ServletHolder(new GeraRelatorioServlet()), "/admin/gera-relatorio");
 		
 		server.setHandler(context);
 		server.start();
