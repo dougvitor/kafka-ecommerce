@@ -32,14 +32,14 @@ public class GeraRelatorioServiceConsumer {
 
 		System.out.println("-------------------------------------------------------");
 		Usuario user = record.value();
-		System.out.println(String.format("Processando relatorio para o usuário %s", user));
+		System.out.println(String.format("Processando relatorio para o usuário %s", user.getUuid()));
 		
 		var target = new File(user.getRelatorioPath());
 		
 		IO.copyTo(SOURCE, target);
 		IO.append(target, String.format("Criado para o usuário %s", user.getUuid()));
 		
-		System.out.println(String.format("Arquivo do relatório gerado", target.getAbsolutePath()));
+		System.out.println(String.format("Arquivo do relatório gerado %s", target.getAbsolutePath()));
 		
 	}
 }
