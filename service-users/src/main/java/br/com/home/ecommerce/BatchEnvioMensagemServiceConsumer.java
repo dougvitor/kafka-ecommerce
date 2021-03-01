@@ -40,7 +40,6 @@ public class BatchEnvioMensagemServiceConsumer {
 				BatchEnvioMensagemServiceConsumer.class.getSimpleName(), 
 				"ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS", 
 				batchService::parse,
-				String.class, 
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}

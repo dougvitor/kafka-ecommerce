@@ -38,7 +38,6 @@ public class CreateUserServiceConsumer {
 				CreateUserServiceConsumer.class.getSimpleName(), 
 				"ECOMMERCE_NEW_ORDER", 
 				userService::parse,
-				PedidoCompra.class,
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}

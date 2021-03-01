@@ -17,7 +17,6 @@ public class EmailServiceConsumer {
 				EmailServiceConsumer.class.getName(),
 				"ECOMMERCE_SEND_EMAIL", 
 				emailServiceConsumer::parse, 
-				Email.class, 
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}
