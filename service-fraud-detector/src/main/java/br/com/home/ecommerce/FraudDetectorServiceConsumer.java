@@ -22,7 +22,6 @@ public class FraudDetectorServiceConsumer {
 				FraudDetectorServiceConsumer.class.getSimpleName(), 
 				"ECOMMERCE_NEW_ORDER", 
 				fraudeService::parse,
-				PedidoCompra.class,
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}

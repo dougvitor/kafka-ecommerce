@@ -23,7 +23,6 @@ public class GeraRelatorioServiceConsumer {
 				GeraRelatorioServiceConsumer.class.getSimpleName(), 
 				"ECOMMERCE_USER_GENERATE_READING_REPORT", 
 				fraudeService::parse,
-				Usuario.class,
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}

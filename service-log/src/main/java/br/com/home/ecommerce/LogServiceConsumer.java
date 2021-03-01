@@ -20,7 +20,6 @@ public class LogServiceConsumer {
 				LogServiceConsumer.class.getSimpleName(),
 				Pattern.compile("ECOMMERCE.*"), 
 				logServiceConsumer::parse, 
-				String.class, 
 				Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()))) {
 			kafkaConsumer.run();
 		}
