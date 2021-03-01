@@ -10,6 +10,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import br.com.home.ecommerce.model.PedidoCompra;
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
+import br.com.home.ecommerce.service.Message;
 
 public class CreateUserServiceConsumer {
 	
@@ -43,13 +44,15 @@ public class CreateUserServiceConsumer {
 		}
 	}
 	
-	private void parse(ConsumerRecord<String, PedidoCompra> record) throws SQLException {
+	private void parse(ConsumerRecord<String, Message<PedidoCompra>> record) throws SQLException {
+		
+		var message = record.value();
 		
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Processando novo pedido, chegando possiveis fraudes");
 		System.out.println(record.value());
 		
-		var pedidoCompra = record.value();
+		var pedidoCompra = message.getPayload();
 		
 		if(isNovoUsuario(pedidoCompra.getEmail())) {
 			inseriNovoUsuario(pedidoCompra.getEmail());

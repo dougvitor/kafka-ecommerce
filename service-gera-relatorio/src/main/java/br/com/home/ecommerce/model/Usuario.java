@@ -15,6 +15,9 @@ public class Usuario {
 	public String getRelatorioPath() {
 		return String.format("target/%s-relatorio.txt", uuid);
 	}
-	
 
+	@Override
+	public String toString() {
+		return "Usuario [uuid=" + uuid + "]";
+	}
 }

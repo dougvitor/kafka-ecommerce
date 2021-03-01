@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
+import br.com.home.ecommerce.service.Message;
 
 public class LogServiceConsumer {
 
@@ -26,7 +27,7 @@ public class LogServiceConsumer {
 
 	}
 
-	private void parse(ConsumerRecord<String, String> record) {
+	private void parse(ConsumerRecord<String, Message<String>> record) {
 		System.out.println("-------------------------------------------------------");
 		System.out.println("LOG " + record.topic());
 		System.out.println(record.key());

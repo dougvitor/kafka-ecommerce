@@ -2,15 +2,19 @@ package br.com.home.ecommerce.serdes;
 
 import java.lang.reflect.Type;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import br.com.home.ecommerce.service.CorrelationId;
 import br.com.home.ecommerce.service.Message;
 
-@SuppressWarnings("rawtypes")
-public class MessageAdapter implements JsonSerializer<Message>{
+@SuppressWarnings({"rawtypes","unchecked"})
+public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer<Message>{
 
 	@Override
 	public JsonElement serialize(Message message, Type type, JsonSerializationContext context) {
@@ -20,6 +24,20 @@ public class MessageAdapter implements JsonSerializer<Message>{
 		obj.add("payload", context.serialize(payload));
 		obj.add("correlationId", context.serialize(message.getId()));
 		return obj;
+	}
+
+	@Override
+	public Message deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		var obj = json.getAsJsonObject();
+		var type = obj.get("type").getAsString();
+		var correlationId = (CorrelationId) context.deserialize(obj.get("correlationId"), CorrelationId.class);
+		try {
+			var payload = context.deserialize(obj.get("payload"), Class.forName(type));
+			return new Message(correlationId, payload);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new JsonParseException(e);
+		}
 	}
 
 }

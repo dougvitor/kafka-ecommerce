@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import br.com.home.ecommerce.model.PedidoCompra;
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
 import br.com.home.ecommerce.service.KafkaServiceProducer;
+import br.com.home.ecommerce.service.Message;
 
 public class FraudDetectorServiceConsumer {
 	
@@ -27,7 +28,9 @@ public class FraudDetectorServiceConsumer {
 		}
 	}
 
-	private void parse(ConsumerRecord<String, PedidoCompra> record) {
+	private void parse(ConsumerRecord<String, Message<PedidoCompra>> record) {
+		
+		var message = record.value();
 
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Processando novo pedido, chegando possiveis fraudes");
@@ -42,7 +45,7 @@ public class FraudDetectorServiceConsumer {
 			e.printStackTrace();
 		}
 		
-		var pedidoCompra = record.value();
+		var pedidoCompra = message.getPayload();
 		
 		if(isFraude(pedidoCompra)) {
 			System.out.println("É uma fraude!!!");
