@@ -17,7 +17,7 @@ import br.com.home.ecommerce.serdes.GsonDeserializer;
 
 public class KafkaServiceConsumer<T> implements Closeable{
 
-	private KafkaConsumer<String, T> consumer;
+	private KafkaConsumer<String, Message<T>> consumer;
 	private ConsumerFunction<T> parse;
 	
 	public KafkaServiceConsumer(String groupID, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
@@ -38,7 +38,7 @@ public class KafkaServiceConsumer<T> implements Closeable{
 
 	public void run() {
 		while(true) {
-			ConsumerRecords<String, T> records = this.consumer.poll(Duration.ofMillis(100));
+			ConsumerRecords<String, Message<T>> records = this.consumer.poll(Duration.ofMillis(100));
 			
 			if(!records.isEmpty()) {
 				System.out.println("Foram encontrados " + records.count() + " registros");
@@ -63,7 +63,6 @@ public class KafkaServiceConsumer<T> implements Closeable{
 		properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
 		properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
 		properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-		properties.setProperty(GsonDeserializer.TYPE_CONFIG, type.getName());
 		
 		properties.putAll(overrideProperties);
 		

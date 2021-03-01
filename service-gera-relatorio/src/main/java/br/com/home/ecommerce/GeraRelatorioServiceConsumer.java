@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import br.com.home.ecommerce.model.Usuario;
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
+import br.com.home.ecommerce.service.Message;
 
 public class GeraRelatorioServiceConsumer {
 	
@@ -28,10 +29,12 @@ public class GeraRelatorioServiceConsumer {
 		}
 	}
 
-	private void parse(ConsumerRecord<String, Usuario> record) throws IOException {
+	private void parse(ConsumerRecord<String, Message<Usuario>> record) throws IOException {
+		
+		var message = record.value();
 
 		System.out.println("-------------------------------------------------------");
-		Usuario user = record.value();
+		Usuario user = message.getPayload();
 		System.out.println(String.format("Processando relatorio para o usuário %s", user.getUuid()));
 		
 		var target = new File(user.getRelatorioPath());

@@ -12,6 +12,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import br.com.home.ecommerce.model.Usuario;
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
 import br.com.home.ecommerce.service.KafkaServiceProducer;
+import br.com.home.ecommerce.service.Message;
 
 public class BatchEnvioMensagemServiceConsumer {
 
@@ -45,14 +46,16 @@ public class BatchEnvioMensagemServiceConsumer {
 		}
 	}
 
-	private void parse(ConsumerRecord<String, String> record) throws SQLException {
+	private void parse(ConsumerRecord<String, Message<String>> record) throws SQLException {
+		
+		var message = record.value();
 
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Processando novo batch");
-		System.out.println(String.format("Tópico: %s", record.value()));
+		System.out.println(String.format("Tópico: %s", message.getPayload()));
 		
 		for(Usuario user : getAllUsers()) {
-			usuarioServiceProducer.send(record.value(), user.getUuid(), user);
+			usuarioServiceProducer.send(message.getPayload(), user.getUuid(), user);
 		}
 
 	}

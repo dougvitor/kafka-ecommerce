@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import br.com.home.ecommerce.model.Email;
 import br.com.home.ecommerce.service.KafkaServiceConsumer;
+import br.com.home.ecommerce.service.Message;
 
 public class EmailServiceConsumer {
 
@@ -23,7 +24,8 @@ public class EmailServiceConsumer {
 
 	}
 
-	private void parse(ConsumerRecord<String, Email> record) {
+	private void parse(ConsumerRecord<String, Message<Email>> record) {
+		
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Enviando e-mail");
 		System.out.println(record.key());
