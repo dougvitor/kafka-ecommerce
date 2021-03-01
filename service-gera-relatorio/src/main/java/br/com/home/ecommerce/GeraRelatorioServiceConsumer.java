@@ -21,7 +21,7 @@ public class GeraRelatorioServiceConsumer {
 
 		try (var kafkaServiceConsumer = new KafkaServiceConsumer<Usuario>(
 				GeraRelatorioServiceConsumer.class.getSimpleName(), 
-				"USER_GENERATE_READING_REPORT", 
+				"ECOMMERCE_USER_GENERATE_READING_REPORT", 
 				fraudeService::parse,
 				Usuario.class,
 				Map.of())) {

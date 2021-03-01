@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import br.com.home.ecommerce.model.Email;
 import br.com.home.ecommerce.model.PedidoCompra;
+import br.com.home.ecommerce.service.CorrelationId;
 import br.com.home.ecommerce.service.KafkaServiceProducer;
 
 public class NewOrderMainProducer {
@@ -22,13 +23,21 @@ public class NewOrderMainProducer {
 					
 					var pedido = new PedidoCompra(pedidoId, total, email);
 					
-					kafkaPedidoServiceProducer.send("ECOMMERCE_NEW_ORDER", email, pedido);
+					kafkaPedidoServiceProducer.send(
+							"ECOMMERCE_NEW_ORDER", 
+							email, 
+							new CorrelationId(NewOrderMainProducer.class.getSimpleName()),
+							pedido);
 					
 					var titulo = String.format("O pedido %s foi recebido!", pedidoId);
 					var corpo = "Obrigado por seu pedido! Nós estamos processando-o";
 					var emailCode = new Email(titulo, corpo);
 					
-					kafkaEmailServiceProducer.send("ECOMMERCE_SEND_EMAIL", email, emailCode);
+					kafkaEmailServiceProducer.send(
+							"ECOMMERCE_SEND_EMAIL", 
+							email, 
+							new CorrelationId(NewOrderMainProducer.class.getSimpleName()),
+							emailCode);
 				}
 			}
 		}

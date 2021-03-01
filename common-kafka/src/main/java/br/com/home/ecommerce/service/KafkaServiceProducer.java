@@ -14,14 +14,14 @@ import br.com.home.ecommerce.serdes.GsonSerializer;
 public class KafkaServiceProducer<T> implements Closeable{
 	
 	private final KafkaProducer<String, Message<T>> producer;
-
+	
 	public KafkaServiceProducer() {
 		this.producer = new KafkaProducer<>(properties());
 	}
 	
-	public void send(String topico, String key, T payload) {
+	public void send(String topico, String key, CorrelationId id, T payload) {
 		
-		var value = new Message<>(new CorrelationId(), payload);
+		var value = new Message<>(id, payload);
 		ProducerRecord<String, Message<T>> record = new ProducerRecord<>(topico, key, value);
 		
 		try {

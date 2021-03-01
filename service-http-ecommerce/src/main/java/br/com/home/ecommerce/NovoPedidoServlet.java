@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import br.com.home.ecommerce.model.Email;
 import br.com.home.ecommerce.model.PedidoCompra;
+import br.com.home.ecommerce.service.CorrelationId;
 import br.com.home.ecommerce.service.KafkaServiceProducer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -28,13 +29,21 @@ public class NovoPedidoServlet extends HttpServlet {
 
 		var pedido = new PedidoCompra(pedidoId, total, email);
 
-		kafkaPedidoServiceProducer.send("ECOMMERCE_NEW_ORDER", email, pedido);
+		kafkaPedidoServiceProducer.send(
+				"ECOMMERCE_NEW_ORDER", 
+				email,
+				new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
+				pedido);
 
 		var titulo = String.format("O pedido %s foi recebido!", pedidoId);
 		var corpo = "Obrigado por seu pedido! Nós estamos processando-o";
 		var emailCode = new Email(titulo, corpo);
 
-		kafkaEmailServiceProducer.send("ECOMMERCE_SEND_EMAIL", email, emailCode);
+		kafkaEmailServiceProducer.send(
+				"ECOMMERCE_SEND_EMAIL", 
+				email, 
+				new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
+				emailCode);
 
 		System.out.println("Processamento do novo pedido de compra finalizado!");
 
