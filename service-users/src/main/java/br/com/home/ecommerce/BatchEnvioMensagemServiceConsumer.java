@@ -38,7 +38,7 @@ public class BatchEnvioMensagemServiceConsumer {
 
 		try (var kafkaServiceConsumer = new KafkaServiceConsumer<String>(
 				BatchEnvioMensagemServiceConsumer.class.getSimpleName(), 
-				"SEND_MESSAGE_TO_ALL_USERS", 
+				"ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS", 
 				batchService::parse,
 				String.class, 
 				Map.of())) {
@@ -55,7 +55,11 @@ public class BatchEnvioMensagemServiceConsumer {
 		System.out.println(String.format("Tópico: %s", message.getPayload()));
 		
 		for(Usuario user : getAllUsers()) {
-			usuarioServiceProducer.send(message.getPayload(), user.getUuid(), user);
+			usuarioServiceProducer.send(
+					message.getPayload(), 
+					user.getUuid(),
+					message.getId().appendCorrelationId(BatchEnvioMensagemServiceConsumer.class.getSimpleName()),
+					user);
 		}
 
 	}
