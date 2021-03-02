@@ -1,6 +1,7 @@
 package br.com.home.ecommerce;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -10,7 +11,7 @@ import br.com.home.ecommerce.service.Message;
 
 public class EmailServiceConsumer {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		var emailServiceConsumer = new EmailServiceConsumer();
 
 		try (var kafkaServiceConsumer = new KafkaServiceConsumer<Email>(

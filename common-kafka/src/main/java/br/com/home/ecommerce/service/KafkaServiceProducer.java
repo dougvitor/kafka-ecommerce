@@ -20,14 +20,9 @@ public class KafkaServiceProducer<T> implements Closeable{
 		this.producer = new KafkaProducer<>(properties());
 	}
 	
-	public void send(String topico, String key, CorrelationId id, T payload){
+	public void send(String topico, String key, CorrelationId id, T payload) throws InterruptedException, ExecutionException{
 		var future = sendAsync(topico, key, id, payload);
-		
-		try {
-			future.get();
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
-		}
+		future.get();
 	}
 
 	public Future<RecordMetadata> sendAsync(String topico, String key, CorrelationId id, T payload) {

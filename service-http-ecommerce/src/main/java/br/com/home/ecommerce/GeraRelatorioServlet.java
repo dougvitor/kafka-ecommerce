@@ -1,6 +1,7 @@
 package br.com.home.ecommerce;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import br.com.home.ecommerce.service.CorrelationId;
 import br.com.home.ecommerce.service.KafkaServiceProducer;
@@ -18,11 +19,15 @@ public class GeraRelatorioServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		batchServiceProducer.send(
-				"ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS", 
-				"ECOMMERCE_USER_GENERATE_READING_REPORT",
-				new CorrelationId(GeraRelatorioServlet.class.getSimpleName()),
-				"ECOMMERCE_USER_GENERATE_READING_REPORT");
+		try {
+			batchServiceProducer.send(
+					"ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS", 
+					"ECOMMERCE_USER_GENERATE_READING_REPORT",
+					new CorrelationId(GeraRelatorioServlet.class.getSimpleName()),
+					"ECOMMERCE_USER_GENERATE_READING_REPORT");
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("Enviado emails para todos os usuários");
 		resp.setStatus(HttpServletResponse.SC_OK);

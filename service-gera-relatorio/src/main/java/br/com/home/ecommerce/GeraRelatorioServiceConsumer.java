@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -15,7 +16,7 @@ public class GeraRelatorioServiceConsumer {
 	
 	private static Path SOURCE =  new File("src/main/resources/relatorio.txt").toPath();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
 
 		GeraRelatorioServiceConsumer fraudeService = new GeraRelatorioServiceConsumer();
 
