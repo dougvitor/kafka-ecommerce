@@ -1,13 +1,20 @@
 package br.com.home.ecommerce;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import br.com.home.ecommerce.consumer.KafkaServiceConsumer;
 
-public class ServiceProvider {
+public class ServiceProvider<T> implements Callable<Void>{
+
+	private final ServiceFactory<T> factory;
+
+	public ServiceProvider(ServiceFactory<T> factory) {
+		this.factory = factory;
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T> void run(ServiceFactory<T> factory) throws InterruptedException, ExecutionException {
+	public Void call() throws InterruptedException, ExecutionException {
 		
 		var service = factory.create();
 		
@@ -18,5 +25,7 @@ public class ServiceProvider {
 				Map.of())) {
 			kafkaServiceConsumer.run();
 		}
+		
+		return null;
 	}
 }

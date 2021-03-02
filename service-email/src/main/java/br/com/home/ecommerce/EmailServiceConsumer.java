@@ -7,7 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 public class EmailServiceConsumer implements ConsumerService<String>{
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException{
-		new ServiceProvider().run(EmailServiceConsumer::new);
+		new ServiceRunner<>(EmailServiceConsumer::new).start(5);
 	}
 
 	@Override
