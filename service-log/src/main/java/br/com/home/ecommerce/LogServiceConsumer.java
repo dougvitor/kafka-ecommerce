@@ -1,6 +1,7 @@
 package br.com.home.ecommerce;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -12,7 +13,7 @@ import br.com.home.ecommerce.service.Message;
 
 public class LogServiceConsumer {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
 
 		var logServiceConsumer = new LogServiceConsumer();
 

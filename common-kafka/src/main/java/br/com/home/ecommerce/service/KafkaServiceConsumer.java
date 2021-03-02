@@ -6,14 +6,17 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import br.com.home.ecommerce.serdes.GsonDeserializer;
+import br.com.home.ecommerce.serdes.GsonSerializer;
 
 public class KafkaServiceConsumer<T> implements Closeable{
 
@@ -36,22 +39,44 @@ public class KafkaServiceConsumer<T> implements Closeable{
 		this.consumer.subscribe(patternTopic);
 	}
 
-	public void run() {
-		while(true) {
-			ConsumerRecords<String, Message<T>> records = this.consumer.poll(Duration.ofMillis(100));
-			
-			if(!records.isEmpty()) {
-				System.out.println("Foram encontrados " + records.count() + " registros");
-				records.forEach(record -> {
-					try {
-						parse.consume(record);
-					} catch (Exception e) {
-						// TODO Por enquanto apenas logando a stack de erro
-						e.printStackTrace();
+	@SuppressWarnings({ "rawtypes", "resource", "unchecked" })
+	public void run() throws InterruptedException, ExecutionException{
+		try (var deadLetter = new KafkaServiceProducer<>()){
+			while(true) {
+				ConsumerRecords<String, Message<T>> records = this.consumer.poll(Duration.ofMillis(100));
+				
+				if(!records.isEmpty()) {
+					System.out.println("Foram encontrados " + records.count() + " registros");
+					
+					for (ConsumerRecord<String, Message<T>> record : records) {
+						try {
+							parse.consume(record);
+						} catch (Exception e) {
+							
+							e.printStackTrace();
+							
+							var message = record.value();
+							
+							deadLetter.send(
+									"ECOMMERCE_DEADLETTER", 
+									message.getId().toString(), 
+									message.getId().appendCorrelationId("DeadLetter"), 
+									new GsonSerializer().serialize("", message));
+						}
 					}
-				});
+				}
 			}
 		}
+	}
+	
+	public void fodasse() {
+		
+		try {
+			System.out.println("");
+		}catch(Exception e) {
+			throw e;
+		}
+		
 	}
 	
 	private Properties getProperties(final String groupID, final Map<String, String> overrideProperties) {

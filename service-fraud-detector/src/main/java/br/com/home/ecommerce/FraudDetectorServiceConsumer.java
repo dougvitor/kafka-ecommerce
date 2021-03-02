@@ -2,6 +2,7 @@ package br.com.home.ecommerce;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -14,7 +15,7 @@ public class FraudDetectorServiceConsumer {
 	
 	private final KafkaServiceProducer<PedidoCompra> producer = new KafkaServiceProducer<>();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
 
 		FraudDetectorServiceConsumer fraudeService = new FraudDetectorServiceConsumer();
 
@@ -27,7 +28,7 @@ public class FraudDetectorServiceConsumer {
 		}
 	}
 
-	private void parse(ConsumerRecord<String, Message<PedidoCompra>> record) {
+	private void parse(ConsumerRecord<String, Message<PedidoCompra>> record) throws InterruptedException, ExecutionException {
 		
 		var message = record.value();
 

@@ -3,6 +3,7 @@ package br.com.home.ecommerce;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import br.com.home.ecommerce.model.Email;
 import br.com.home.ecommerce.model.PedidoCompra;
@@ -29,21 +30,29 @@ public class NovoPedidoServlet extends HttpServlet {
 
 		var pedido = new PedidoCompra(pedidoId, total, email);
 
-		kafkaPedidoServiceProducer.send(
-				"ECOMMERCE_NEW_ORDER", 
-				email,
-				new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
-				pedido);
+		try {
+			kafkaPedidoServiceProducer.send(
+					"ECOMMERCE_NEW_ORDER", 
+					email,
+					new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
+					pedido);
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 
 		var titulo = String.format("O pedido %s foi recebido!", pedidoId);
 		var corpo = "Obrigado por seu pedido! Nós estamos processando-o";
 		var emailCode = new Email(titulo, corpo);
 
-		kafkaEmailServiceProducer.send(
-				"ECOMMERCE_SEND_EMAIL", 
-				email, 
-				new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
-				emailCode);
+		try {
+			kafkaEmailServiceProducer.send(
+					"ECOMMERCE_SEND_EMAIL", 
+					email, 
+					new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
+					emailCode);
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 
 		System.out.println("Processamento do novo pedido de compra finalizado!");
 
