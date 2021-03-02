@@ -1,4 +1,4 @@
-package br.com.home.ecommerce;
+package br.com.home.ecommerce.consumer;
 
 import java.util.concurrent.Executors;
 

@@ -4,6 +4,9 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import br.com.home.ecommerce.consumer.ConsumerService;
+import br.com.home.ecommerce.consumer.ServiceRunner;
+
 public class EmailServiceConsumer implements ConsumerService<String>{
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException{

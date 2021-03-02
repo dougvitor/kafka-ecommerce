@@ -1,9 +1,8 @@
-package br.com.home.ecommerce;
+package br.com.home.ecommerce.consumer;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import br.com.home.ecommerce.consumer.KafkaServiceConsumer;
 
 public class ServiceProvider<T> implements Callable<Void>{
 
