@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import br.com.home.ecommerce.CorrelationId;
-import br.com.home.ecommerce.model.Email;
 import br.com.home.ecommerce.model.PedidoCompra;
 import br.com.home.ecommerce.producer.KafkaServiceProducer;
 import jakarta.servlet.ServletException;
@@ -19,8 +17,6 @@ public class NovoPedidoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final KafkaServiceProducer<PedidoCompra> kafkaPedidoServiceProducer = new KafkaServiceProducer<>();
-
-	private final KafkaServiceProducer<Email> kafkaEmailServiceProducer = new KafkaServiceProducer<>();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,20 +36,6 @@ public class NovoPedidoServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		var titulo = String.format("O pedido %s foi recebido!", pedidoId);
-		var corpo = "Obrigado por seu pedido! Nós estamos processando-o";
-		var emailCode = new Email(titulo, corpo);
-
-		try {
-			kafkaEmailServiceProducer.send(
-					"ECOMMERCE_SEND_EMAIL", 
-					email, 
-					new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
-					emailCode);
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
-		}
-
 		System.out.println("Processamento do novo pedido de compra finalizado!");
 
 		resp.setStatus(HttpServletResponse.SC_OK);
@@ -64,7 +46,6 @@ public class NovoPedidoServlet extends HttpServlet {
 	public void destroy() {
 		super.destroy();
 		kafkaPedidoServiceProducer.close();
-		kafkaEmailServiceProducer.close();
 	}
 
 }

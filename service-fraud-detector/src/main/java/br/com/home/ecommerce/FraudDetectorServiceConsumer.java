@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import br.com.home.ecommerce.Message;
 import br.com.home.ecommerce.consumer.KafkaServiceConsumer;
 import br.com.home.ecommerce.model.PedidoCompra;
 import br.com.home.ecommerce.producer.KafkaServiceProducer;
