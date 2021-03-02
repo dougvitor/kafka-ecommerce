@@ -3,12 +3,13 @@ package br.com.home.ecommerce.service;
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
-
 import br.com.home.ecommerce.serdes.GsonSerializer;
 
 public class KafkaServiceProducer<T> implements Closeable{
@@ -19,17 +20,21 @@ public class KafkaServiceProducer<T> implements Closeable{
 		this.producer = new KafkaProducer<>(properties());
 	}
 	
-	public void send(String topico, String key, CorrelationId id, T payload) {
-		
-		var value = new Message<>(id, payload);
-		ProducerRecord<String, Message<T>> record = new ProducerRecord<>(topico, key, value);
+	public void send(String topico, String key, CorrelationId id, T payload){
+		var future = sendAsync(topico, key, id, payload);
 		
 		try {
-			this.producer.send(record, sendCallback()).get();
+			future.get();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		
+	}
+
+	public Future<RecordMetadata> sendAsync(String topico, String key, CorrelationId id, T payload) {
+		var value = new Message<>(id, payload);
+		ProducerRecord<String, Message<T>> record = new ProducerRecord<>(topico, key, value);
+		var future = this.producer.send(record, sendCallback());
+		return future;
 	}
 	
 	private static Callback sendCallback() {

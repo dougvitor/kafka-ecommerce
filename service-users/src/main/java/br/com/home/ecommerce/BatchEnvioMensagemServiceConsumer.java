@@ -54,7 +54,7 @@ public class BatchEnvioMensagemServiceConsumer {
 		System.out.println(String.format("Tópico: %s", message.getPayload()));
 		
 		for(Usuario user : getAllUsers()) {
-			usuarioServiceProducer.send(
+			usuarioServiceProducer.sendAsync(
 					message.getPayload(), 
 					user.getUuid(),
 					message.getId().appendCorrelationId(BatchEnvioMensagemServiceConsumer.class.getSimpleName()),
