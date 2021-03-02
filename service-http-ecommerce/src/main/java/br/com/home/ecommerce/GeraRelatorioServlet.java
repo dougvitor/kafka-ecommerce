@@ -3,8 +3,8 @@ package br.com.home.ecommerce;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import br.com.home.ecommerce.service.CorrelationId;
-import br.com.home.ecommerce.service.KafkaServiceProducer;
+import br.com.home.ecommerce.CorrelationId;
+import br.com.home.ecommerce.producer.KafkaServiceProducer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

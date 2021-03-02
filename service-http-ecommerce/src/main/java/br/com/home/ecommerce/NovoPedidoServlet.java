@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+import br.com.home.ecommerce.CorrelationId;
 import br.com.home.ecommerce.model.Email;
 import br.com.home.ecommerce.model.PedidoCompra;
-import br.com.home.ecommerce.service.CorrelationId;
-import br.com.home.ecommerce.service.KafkaServiceProducer;
+import br.com.home.ecommerce.producer.KafkaServiceProducer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

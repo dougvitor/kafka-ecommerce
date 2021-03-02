@@ -1,4 +1,4 @@
-package br.com.home.ecommerce.serdes;
+package br.com.home.ecommerce;
 
 import java.lang.reflect.Type;
 
@@ -9,9 +9,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
-import br.com.home.ecommerce.service.CorrelationId;
-import br.com.home.ecommerce.service.Message;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer<Message>{

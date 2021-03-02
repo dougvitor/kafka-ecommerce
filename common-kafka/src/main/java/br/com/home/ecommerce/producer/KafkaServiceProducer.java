@@ -1,16 +1,19 @@
-package br.com.home.ecommerce.service;
+package br.com.home.ecommerce.producer;
 
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
-import br.com.home.ecommerce.serdes.GsonSerializer;
+
+import br.com.home.ecommerce.CorrelationId;
+import br.com.home.ecommerce.Message;
 
 public class KafkaServiceProducer<T> implements Closeable{
 	
@@ -26,7 +29,7 @@ public class KafkaServiceProducer<T> implements Closeable{
 	}
 
 	public Future<RecordMetadata> sendAsync(String topico, String key, CorrelationId id, T payload) {
-		var value = new Message<>(id, payload);
+		var value = new Message<>(id.appendCorrelationId(String.format("_%s", topico)), payload);
 		ProducerRecord<String, Message<T>> record = new ProducerRecord<>(topico, key, value);
 		var future = this.producer.send(record, sendCallback());
 		return future;
