@@ -45,6 +45,14 @@ Atribuindo o valor 3  para as propriedades offsets.topic.replication.factor e tr
 a réplica
 
 
+-- Commits e offsets
+
+Entre as propriedades que definimos no Consumer existe a AUTO_OFFSET_RESET_CONFIG, há dois possíveis valores que podemos atribui-la:
+
+latest = o consumer começará a consumir a partir do offset mais recente, ou seja, as mensagens antigas não serão consumidas
+earliest = o consumer começará a consumir a partir do offset mais antigo, ou seja, desde as mensagens mais antigas existentes.
+
+
 
 
 
