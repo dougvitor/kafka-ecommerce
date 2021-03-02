@@ -1,11 +1,12 @@
-package br.com.home.ecommerce.serdes;
+package br.com.home.ecommerce.consumer;
 
 import org.apache.kafka.common.serialization.Deserializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import br.com.home.ecommerce.service.Message;
+import br.com.home.ecommerce.Message;
+import br.com.home.ecommerce.MessageAdapter;
 
 @SuppressWarnings("rawtypes")
 public class GsonDeserializer implements Deserializer<Message> {

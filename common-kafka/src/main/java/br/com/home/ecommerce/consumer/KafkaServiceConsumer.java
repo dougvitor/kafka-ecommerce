@@ -1,4 +1,4 @@
-package br.com.home.ecommerce.service;
+package br.com.home.ecommerce.consumer;
 
 import java.io.Closeable;
 import java.time.Duration;
@@ -15,8 +15,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-import br.com.home.ecommerce.serdes.GsonDeserializer;
-import br.com.home.ecommerce.serdes.GsonSerializer;
+import br.com.home.ecommerce.Message;
+import br.com.home.ecommerce.producer.GsonSerializer;
+import br.com.home.ecommerce.producer.KafkaServiceProducer;
 
 public class KafkaServiceConsumer<T> implements Closeable{
 

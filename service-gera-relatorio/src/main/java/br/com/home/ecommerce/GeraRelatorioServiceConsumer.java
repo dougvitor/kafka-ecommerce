@@ -8,9 +8,9 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import br.com.home.ecommerce.Message;
+import br.com.home.ecommerce.consumer.KafkaServiceConsumer;
 import br.com.home.ecommerce.model.Usuario;
-import br.com.home.ecommerce.service.KafkaServiceConsumer;
-import br.com.home.ecommerce.service.Message;
 
 public class GeraRelatorioServiceConsumer {
 	

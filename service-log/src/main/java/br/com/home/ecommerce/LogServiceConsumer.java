@@ -8,8 +8,8 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-import br.com.home.ecommerce.service.KafkaServiceConsumer;
-import br.com.home.ecommerce.service.Message;
+import br.com.home.ecommerce.Message;
+import br.com.home.ecommerce.consumer.KafkaServiceConsumer;
 
 public class LogServiceConsumer {
 

@@ -1,4 +1,4 @@
-package br.com.home.ecommerce.service;
+package br.com.home.ecommerce;
 
 public class Message<T> {
 	
