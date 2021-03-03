@@ -14,7 +14,7 @@ public class CreateUserServiceConsumer implements ConsumerService<PedidoCompra>{
 	private LocalDatabase database;
 
 	public CreateUserServiceConsumer() throws SQLException {
-		database = new LocalDatabase("users_database.db");
+		database = new LocalDatabase("users_database.sqlite");
 		
 		String createTableSQL = "create table Usuario ("
 				+ "uuid varchar(200) primary key,"

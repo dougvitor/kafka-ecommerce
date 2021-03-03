@@ -46,4 +46,8 @@ private final Connection connection;
 		});
 		return preparedStatement;
 	}
+
+	public void close() throws SQLException {
+		connection.close();
+	}
 }

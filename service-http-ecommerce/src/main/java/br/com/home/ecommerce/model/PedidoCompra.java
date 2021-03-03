@@ -16,6 +16,10 @@ public class PedidoCompra {
 		this.total = total;
 		this.email = email;
 	}
+	
+	public String getPedidoId() {
+		return pedidoId;
+	}
 
 	public BigDecimal getTotal() {
 		return total;
