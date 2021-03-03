@@ -2,7 +2,7 @@ package br.com.home.ecommerce;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
 
 import br.com.home.ecommerce.model.PedidoCompra;
@@ -20,26 +20,42 @@ public class NovoPedidoServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		var email = req.getParameter("email");
-		var pedidoId = UUID.randomUUID().toString();
-		var total = new BigDecimal(req.getParameter("valor"));
-
-		var pedido = new PedidoCompra(pedidoId, total, email);
-
+		
 		try {
-			kafkaPedidoServiceProducer.send(
-					"ECOMMERCE_NEW_ORDER", 
-					email,
-					new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
-					pedido);
-		} catch (InterruptedException | ExecutionException e) {
+			var email = req.getParameter("email");
+			var pedidoId = req.getParameter("uuid");
+			var total = new BigDecimal(req.getParameter("valor"));
+			
+			if(pedidoId == null || email == null || total == null) {
+				resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				resp.getWriter().println("Parametros obrigatórios não foram enviados");
+				return;
+			}
+			
+			var pedido = new PedidoCompra(pedidoId, total, email);
+			
+			try(var database = new PedidoCompraDatabase()){
+				if(database.saveNew(pedido)) {
+					kafkaPedidoServiceProducer.send(
+							"ECOMMERCE_NEW_ORDER", 
+							email,
+							new CorrelationId(NovoPedidoServlet.class.getSimpleName()),
+							pedido);
+					
+					System.out.println("Processamento do novo pedido de compra finalizado!");
+					resp.setStatus(HttpServletResponse.SC_OK);
+					resp.getWriter().println("Processamento do novo pedido de compra finalizado!");
+				}else {
+					System.out.println("Recebido pedido de compra já enviado anteriormente");
+					resp.setStatus(HttpServletResponse.SC_OK);
+					resp.getWriter().println("Recebido pedido de compra já enviado anteriormente");
+				}
+			}
+		} catch (InterruptedException | ExecutionException | SQLException e) {
 			e.printStackTrace();
 		}
 
-		System.out.println("Processamento do novo pedido de compra finalizado!");
-
-		resp.setStatus(HttpServletResponse.SC_OK);
-		resp.getWriter().println("Processamento do novo pedido de compra finalizado!");
+		
 	}
 	
 	@Override

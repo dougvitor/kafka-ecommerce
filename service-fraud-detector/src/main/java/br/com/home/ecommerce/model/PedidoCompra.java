@@ -24,6 +24,10 @@ public class PedidoCompra {
 	public String getEmail() {
 		return email;
 	}
+	
+	public String getPedidoId() {
+		return pedidoId;
+	}
 
 	@Override
 	public String toString() {

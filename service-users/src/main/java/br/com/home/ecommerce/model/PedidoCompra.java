@@ -21,5 +21,10 @@ public class PedidoCompra {
 	public String getEmail() {
 		return email;
 	}
+
+	@Override
+	public String toString() {
+		return "PedidoCompra [pedidoId=" + pedidoId + ", total=" + total + ", email=" + email + "]";
+	}
 	
 }

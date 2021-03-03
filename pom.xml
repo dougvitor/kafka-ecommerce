@@ -44,5 +44,6 @@
 		<module>service-http-ecommerce</module>
 		<module>service-gera-relatorio</module>
 		<module>service-email-novo-pedido-compra</module>
+		<module>common-database</module>
 	</modules>
 </project>
