@@ -2,7 +2,6 @@ package br.com.home.ecommerce.consumer;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 
 public class ServiceProvider<T> implements Callable<Void>{
 
@@ -13,7 +12,7 @@ public class ServiceProvider<T> implements Callable<Void>{
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Void call() throws InterruptedException, ExecutionException {
+	public Void call() throws Exception {
 		
 		var service = factory.create();
 		

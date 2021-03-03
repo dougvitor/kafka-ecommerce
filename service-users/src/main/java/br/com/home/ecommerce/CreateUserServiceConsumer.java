@@ -3,21 +3,20 @@ package br.com.home.ecommerce;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import br.com.home.ecommerce.Message;
-import br.com.home.ecommerce.consumer.KafkaServiceConsumer;
+import br.com.home.ecommerce.consumer.ConsumerService;
+import br.com.home.ecommerce.consumer.ServiceRunner;
 import br.com.home.ecommerce.model.PedidoCompra;
 
-public class CreateUserServiceConsumer {
+public class CreateUserServiceConsumer implements ConsumerService<PedidoCompra>{
 	
 	private final Connection connection;
 	
-	public CreateUserServiceConsumer() throws SQLException{
+	private CreateUserServiceConsumer() throws SQLException{
 		
 		String url = "jdbc:sqlite:target/users_database.db";
 		connection = DriverManager.getConnection(url);
@@ -32,19 +31,21 @@ public class CreateUserServiceConsumer {
 	}
 	
 	public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
-
-		CreateUserServiceConsumer userService = new CreateUserServiceConsumer();
-
-		try (var kafkaServiceConsumer = new KafkaServiceConsumer<PedidoCompra>(
-				CreateUserServiceConsumer.class.getSimpleName(), 
-				"ECOMMERCE_NEW_ORDER", 
-				userService::parse,
-				Map.of())) {
-			kafkaServiceConsumer.run();
-		}
+		new ServiceRunner<>(CreateUserServiceConsumer::new).start(1);
 	}
 	
-	private void parse(ConsumerRecord<String, Message<PedidoCompra>> record) throws SQLException {
+	@Override
+	public String getTopic() {
+		return "ECOMMERCE_NEW_ORDER";
+	}
+
+	@Override
+	public String getConsumerGroup() {
+		return CreateUserServiceConsumer.class.getSimpleName();
+	}
+	
+	@Override
+	public void parse(ConsumerRecord<String, Message<PedidoCompra>> record) throws SQLException {
 		
 		var message = record.value();
 		
@@ -81,5 +82,5 @@ public class CreateUserServiceConsumer {
 		System.out.println(String.format("Usuario %s e email %s adicionado", uuid, email));
 	
 	}
-	
+
 }
