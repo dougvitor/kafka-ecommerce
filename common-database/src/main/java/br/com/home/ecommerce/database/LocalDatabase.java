@@ -39,7 +39,7 @@ private final Connection connection;
 		
 		List.of(params).forEach(param -> {
 			try {
-				preparedStatement.setString(count.getAndIncrement(), param);
+				preparedStatement.setString(count.incrementAndGet(), param);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
